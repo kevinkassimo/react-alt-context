@@ -3,7 +3,6 @@
  */
 
 import React, { createContext } from 'react';
-import createReactClass from 'create-react-class';
 
 /*
  * Create a connect function with using the given Consumer wrapper
@@ -17,8 +16,8 @@ function _createConnector(Consumer) {
     // Attempt to capitalize the first character
     const ctxUpdateName = `set${ ctxName.replace(/^\w/, (chr) => chr.toUpperCase()) }`;
     
-    return createReactClass({
-      render: function () {
+    return class extends React.Component {
+      render() {
         const props = this.props;
         const _consumerFunc = (context) => {
           // Apply custom prop names
@@ -34,45 +33,111 @@ function _createConnector(Consumer) {
           </Consumer>
         );
       }
-    })
-  }
+    };
+  };
 }
 
 /*
  * create a context, returns { Provider, connect }
  */
-const create = (value) => {
+const createConnector = (value) => {
   const { Provider, Consumer } = createContext(null);
 
-  const _ProviderWrapper = createReactClass({
-    getInitialState: function () {
-      return {
-        $value: value,
-        $update: this.$update,
-      };
-    },
-    $update: function(v) {
-      this.setState({
-        $value: v,
-      });
-    },
-    render: function() {
-      return (
-        <Provider value={this.state}>
-          {this.props.children}
-        </Provider>
-      );
-    }
-  });
-
   return {
-    Provider: _ProviderWrapper,
+    Provider: class extends React.Component {
+      constructor(props) {
+        super(props);
+
+        this.$update = (v) => {
+          this.setState({ $value: v });
+        };
+
+        this.state = {
+          $value: value,
+          $update: this.$update,
+        };
+      }
+      render() {
+        return (
+          <Provider value={this.state}>
+            {this.props.children}
+          </Provider>
+        );
+      }
+    },
     connect: _createConnector(Consumer),
   };
-}
+};
+
+/*
+ * create the context decorators
+ */
+const createDecorator = () => {
+  const {
+    Provider:RawProvider,
+    Consumer: RawConsumer,
+  } = createContext(null);
+
+  const provider = (value) => (WrappedClass) => {
+    return class extends React.Component {
+      constructor(props) {
+        super(props);
+
+        this.$update = (v) => {
+          this.setState({ $value: v });
+        };
+
+        this.state = {
+          $value: value,
+          $update: this.$update,
+        };
+      }
+      render() {
+        return (
+          <RawProvider value={this.state}>
+            <WrappedClass {...this.props} />
+          </RawProvider>
+        );
+      }
+    };
+  }
+
+  const consumer = (ctxName) => (WrappedClass) => {
+    // Use default name `ctx` if no other names are given
+    if (!ctxName) {
+      ctxName = 'ctx';
+    }
+    // Attempt to capitalize the first character
+    const ctxUpdateName = `set${ ctxName.replace(/^\w/, (chr) => chr.toUpperCase()) }`;
+
+    return class extends React.Component {
+      render() {
+        const _consumerFunc = (context) => {
+          // Apply custom prop names
+          const _ctxProps = {
+            [ctxName]: context.$value,
+            [ctxUpdateName]: context.$update,
+          };
+          return <WrappedClass {...this.props} {..._ctxProps}/>
+        }
+        return (
+          <RawConsumer>
+            {_consumerFunc}
+          </RawConsumer>
+        );
+      }
+    };
+  }
+
+  return {
+    provider,
+    consumer,
+  };
+};
 
 const _exports = {
-  create,
+  createConnector,
+  createDecorator,
 };
 
 export default _exports;
