@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 // Import altCtx
-import altCtx from 'altctx';
+import altCtx from 'react-alt-context';
 
 // Provider is a crafted provider wrapper of default React 16 Context Provider
 // altCtx.create(defaultValue)
