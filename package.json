@@ -1,6 +1,6 @@
 {
   "name": "react-alt-context",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,11 +10,18 @@
     "type": "git",
     "url": "git+https://github.com/kevinkassimo/react-alt-context.git"
   },
-  "keywords": ["react", "react-dom", "context", "provider", "react 16", "alternative usage"],
+  "keywords": [
+    "react",
+    "reactjs",
+    "react-dom",
+    "context",
+    "provider",
+    "react 16",
+    "alternative usage"
+  ],
   "author": "Kevin Qian <kevinkassimo@gmail.com> (http://ksm.sh)",
   "license": "MIT",
   "dependencies": {
-    "create-react-class": "^15.6.3",
     "react": "^16.3.2",
     "react-dom": "^16.3.2"
   }

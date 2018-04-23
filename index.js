@@ -74,7 +74,7 @@ const createConnector = (value) => {
  */
 const createDecorator = () => {
   const {
-    Provider:RawProvider,
+    Provider: RawProvider,
     Consumer: RawConsumer,
   } = createContext(null);
 

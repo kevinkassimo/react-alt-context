@@ -9,17 +9,6 @@ import altCtx from '../index';
 
 const { provider, consumer } = altCtx.createDecorator();
 
-@consumer('colorWrapper')
-class Button extends React.Component {
-  render() {
-    return (
-      <div>
-        <button style={{ backgroundColor: this.props.colorWrapper.color }} onClick={() => this.props.setColorWrapper({ color: 'green' })}>{this.props.text}</button>
-      </div>
-    );
-  }
-}
-
 @provider({color: 'red'})
 class App extends React.Component {
   render() {
@@ -29,6 +18,21 @@ class App extends React.Component {
         <Button text={'Click Me!!!'}/>
       </div>
     )
+  }
+}
+
+@consumer('colorWrapper')
+class Button extends React.Component {
+  render() {
+    return (
+      <div>
+        <button
+          style={{ backgroundColor: this.props.colorWrapper.color }}
+          onClick={() => this.props.setColorWrapper({ color: 'green' })}>
+          {this.props.text}
+        </button>
+      </div>
+    );
   }
 }
 
