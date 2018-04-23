@@ -5,17 +5,23 @@
 import React, { createContext } from 'react';
 import createReactClass from 'create-react-class';
 
+/*
+ * Create a connect function with using the given Consumer wrapper
+ */
 function _createConnector(Consumer) {
   return (Klass, ctxName = null) => {
+    // Use default name `ctx` if no other names are given
     if (!ctxName) {
       ctxName = 'ctx';
     }
+    // Attempt to capitalize the first character
     const ctxUpdateName = `set${ ctxName.replace(/^\w/, (chr) => chr.toUpperCase()) }`;
     
     return createReactClass({
       render: function () {
         const props = this.props;
         const _consumerFunc = (context) => {
+          // Apply custom prop names
           const _ctxProps = {
             [ctxName]: context.$value,
             [ctxUpdateName]: context.$update,
@@ -32,6 +38,9 @@ function _createConnector(Consumer) {
   }
 }
 
+/*
+ * create a context, returns { Provider, connect }
+ */
 const create = (value) => {
   const { Provider, Consumer } = createContext(null);
 
