@@ -1,4 +1,4 @@
-# AltCtx Alternative API for React Context
+# `react-alt-context` Alternative API for React Context
 
 This is a working-on-progress minimal experiment with the brand-new React 16 `Context` API. This is created such that people no longer need to write their own update functions to Context values.
 
@@ -44,7 +44,7 @@ class UnconnectedButton extends React.Component {
 }
 
 // Connecting context to UnconnectedButton 
-// We tell altCtx to connect the context value to a prop named 'colorWrapper'. If not specified, the default value will be accessible at `this.props.ctx` and update function will be at `this.props.updateCtx`
+// We tell altCtx to connect the context value to a prop named 'colorWrapper'. If not specified, the default value will be accessible at `this.props.ctx` and update function will be at `this.props.setCtx(newVal)`
 const Button = connect(UnconnectedButton, 'colorWrapper');
 
 render(<App />, document.getElementById('root'));
