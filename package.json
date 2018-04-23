@@ -1,12 +1,12 @@
 {
   "name": "altctx",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["react", "react-dom", "context", "provider", "react 16", "alternative usage"],
   "author": "Kevin Qian <kevinkassimo@gmail.com> (http://ksm.sh)",
   "license": "ISC",
   "dependencies": {
