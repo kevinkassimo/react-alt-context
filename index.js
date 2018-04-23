@@ -1,30 +1,41 @@
+/*
+ * Alternative React Context API
+ */
+
 import React, { createContext } from 'react';
 import createReactClass from 'create-react-class';
 
-class Ctx {
-  constructor(Consumer) {
-    this.Consumer = Consumer;
-  }
-
-  connect = (Klass) => {
-    let Consumer = this.Consumer;
-
+function _createConnector(Consumer) {
+  return (Klass, ctxName = null) => {
+    if (!ctxName) {
+      ctxName = 'ctx';
+    }
+    const ctxUpdateName = `set${ ctxName.replace(/^\w/, (chr) => chr.toUpperCase()) }`;
+    
     return createReactClass({
       render: function () {
+        const props = this.props;
+        const _consumerFunc = (context) => {
+          const _ctxProps = {
+            [ctxName]: context.$value,
+            [ctxUpdateName]: context.$update,
+          };
+          return <Klass {...props} {..._ctxProps}/>
+        }
         return (
           <Consumer>
-            {ctx => <Klass ctx={ctx.$value} updateCtx={ctx.$update} />}
+            {_consumerFunc}
           </Consumer>
         );
       }
-    });
-  };
+    })
+  }
 }
 
-export const create = (value) => {
+const create = (value) => {
   const { Provider, Consumer } = createContext(null);
 
-  const ProviderWrapper = createReactClass({
+  const _ProviderWrapper = createReactClass({
     getInitialState: function () {
       return {
         $value: value,
@@ -37,7 +48,6 @@ export const create = (value) => {
       });
     },
     render: function() {
-      console.log(this.state);
       return (
         <Provider value={this.state}>
           {this.props.children}
@@ -46,10 +56,14 @@ export const create = (value) => {
     }
   });
 
-  const ctxObject = new Ctx(Consumer)
-
   return {
-    Provider: ProviderWrapper,
-    connect: ctxObject.connect,
+    Provider: _ProviderWrapper,
+    connect: _createConnector(Consumer),
   };
 }
+
+const _exports = {
+  create,
+};
+
+export default _exports;
