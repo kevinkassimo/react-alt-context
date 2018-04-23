@@ -1,5 +1,5 @@
 {
-  "name": "altctx",
+  "name": "react-alt-context",
   "version": "0.0.4",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kevinkassimo/altctx.git"
+    "url": "git+https://github.com/kevinkassimo/react-alt-context.git"
   },
   "keywords": ["react", "react-dom", "context", "provider", "react 16", "alternative usage"],
   "author": "Kevin Qian <kevinkassimo@gmail.com> (http://ksm.sh)",
